@@ -24,12 +24,29 @@ export function audit(options: AuditOptions) {
     const originalEnd = res.end;
     
     // Override end function to capture response
-    res.end = function(...args: any[]) {
-      // Restore original end
-      res.end = originalEnd;
-      
+    res.end = function(
+      this: Response,
+      chunk?: any,
+      encoding?: BufferEncoding | (() => void),
+      cb?: () => void
+    ): any {
+      // Handle different overloads
+      let finalChunk = chunk;
+      let finalEncoding: BufferEncoding | undefined;
+      let finalCb: (() => void) | undefined;
+
+      if (typeof encoding === 'function') {
+        finalCb = encoding;
+        finalEncoding = undefined;
+      } else if (typeof cb === 'function') {
+        finalEncoding = encoding as BufferEncoding;
+        finalCb = cb;
+      } else {
+        finalEncoding = encoding as BufferEncoding;
+      }
+
       // Call original end
-      const result = originalEnd.apply(res, args);
+      const result = originalEnd.call(this, finalChunk, finalEncoding, finalCb);
       
       // Log audit after response
       const userId = (req as any).userId;
@@ -73,8 +90,8 @@ export function audit(options: AuditOptions) {
             requestId: req.headers['x-request-id'],
             timestamp: new Date(),
           },
-        }).catch(error => {
-          logger.error('Failed to create audit log:', error);
+        }).catch((error: unknown) => {
+          logger.error('Failed to create audit log:', error instanceof Error ? error.message : String(error));
         });
       }
       
@@ -114,7 +131,7 @@ export function auditLog(action: AuditAction, resource: string) {
         }
         
         return result;
-      } catch (error) {
+      } catch (error: unknown) {
         // Log failure
         if (userId) {
           await auditService.createLog({
@@ -125,7 +142,7 @@ export function auditLog(action: AuditAction, resource: string) {
             details: {
               method: propertyKey,
               duration: Date.now() - startTime,
-              error: error.message,
+              error: error instanceof Error ? error.message : String(error),
             },
           });
         }
