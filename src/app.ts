@@ -43,7 +43,7 @@ const app = express();
 // Security middleware (CORS configured for credentials)
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : function (origin, callback) {
+  origin: function (origin, callback) {
     callback(null, true);
   },
   credentials: true
