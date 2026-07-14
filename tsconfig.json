@@ -13,7 +13,6 @@
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
     "noImplicitAny": false,
     "strictNullChecks": false,
     "types": ["node", "reflect-metadata"]
