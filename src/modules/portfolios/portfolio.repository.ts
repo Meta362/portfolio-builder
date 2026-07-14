@@ -146,8 +146,8 @@ export class PortfolioRepository {
           $set: {
             ...updateData,
             updatedAt: new Date(),
-            version: { $inc: 1 },
-          }
+          },
+          $inc: { version: 1 }
         },
         { new: true, runValidators: true }
       );
