@@ -40,7 +40,7 @@ import { verifyCloudinaryConnection } from './config/cloudinary';
 
 const app = express();
 
-// Security middleware
+// Security middleware (CORS configured for credentials)
 app.use(helmet());
 app.use(cors({
   origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : function (origin, callback) {
