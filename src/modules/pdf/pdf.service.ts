@@ -1,5 +1,5 @@
 // src/modules/pdf/pdf.service.ts
-import puppeteer from 'puppeteer';
+// Puppeteer is imported dynamically in generatePdfBuffer to fix ERR_REQUIRE_ESM
 import Handlebars from 'handlebars';
 import fs from 'fs';
 import path from 'path';
@@ -197,6 +197,9 @@ export class PdfService {
 
     let browser = null;
     try {
+      const puppeteerModule = await eval(`import('puppeteer')`);
+      const puppeteer = puppeteerModule.default;
+
       browser = await puppeteer.launch({
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
