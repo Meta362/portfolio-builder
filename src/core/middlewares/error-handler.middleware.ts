@@ -34,6 +34,20 @@ export const errorHandler = (
     return;
   }
 
+  // Handle Mongoose CastError (e.g., invalid ObjectId)
+  if (err.name === 'CastError') {
+    res.status(400).json({
+      success: false,
+      error: {
+        message: 'Invalid ID format',
+        code: 'INVALID_ID_FORMAT'
+      },
+      timestamp: new Date().toISOString(),
+      path: req.path
+    });
+    return;
+  }
+
   // Default error for unknown errors
   const statusCode = (err as any).statusCode || 500;
   const message = statusCode === 500 

@@ -15,6 +15,9 @@ router.get('/username/:username', controller.getPublicPortfolio);
 // Protected routes (require authentication)
 router.use(authenticate);
 
+// Statistics
+router.get('/stats', controller.getPortfolioStats);
+
 // CRUD operations
 router.get('/', controller.getAllPortfolios);
 router.get('/:id', controller.getPortfolioById);
@@ -25,8 +28,5 @@ router.delete('/:id', controller.deletePortfolio);
 // Publishing
 router.post('/:id/publish', controller.publishPortfolio);
 router.post('/:id/unpublish', controller.unpublishPortfolio);
-
-// Statistics
-router.get('/stats', controller.getPortfolioStats);
 
 export default router;

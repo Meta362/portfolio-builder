@@ -26,6 +26,9 @@ router.put('/profile', validate(UpdateProfileDto), controller.updateProfile);
 // Get all users
 router.get('/', authorize('admin'), controller.getAllUsers);
 
+// Get user statistics
+router.get('/stats', authorize('admin'), controller.getUserStats);
+
 // Get user by ID
 router.get('/:id', authorize('admin'), controller.getUserById);
 
@@ -43,8 +46,5 @@ router.post('/:id/restore', authorize('admin'), controller.restoreUser);
 
 // Suspend user
 router.post('/:id/suspend', authorize('admin'), controller.suspendUser);
-
-// Get user statistics
-router.get('/stats', authorize('admin'), controller.getUserStats);
 
 export default router;
