@@ -47,7 +47,12 @@ export class PdfService {
    */
   private compileTemplates(): void {
     try {
-      const templatePath = path.join(__dirname, 'templates', 'portfolio-template.hbs');
+      let templatePath = path.join(__dirname, 'templates', 'portfolio-template.hbs');
+
+      if (!fs.existsSync(templatePath)) {
+        // Fallback to src directory if not copied to dist
+        templatePath = path.join(process.cwd(), 'src', 'modules', 'pdf', 'templates', 'portfolio-template.hbs');
+      }
 
       if (!fs.existsSync(templatePath)) {
         logger.warn(`⚠️ Template file not found: ${templatePath}`);
