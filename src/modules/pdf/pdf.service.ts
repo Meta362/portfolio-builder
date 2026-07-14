@@ -202,12 +202,18 @@ export class PdfService {
 
     let browser = null;
     try {
-      const puppeteerModule = await eval(`import('puppeteer')`);
+      // Use puppeteer-core and @sparticuz/chromium for Render environment
+      const chromiumModule = await eval(`import('@sparticuz/chromium')`);
+      const chromium = chromiumModule.default;
+      const puppeteerModule = await eval(`import('puppeteer-core')`);
       const puppeteer = puppeteerModule.default;
 
       browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true,
       });
 
       const page = await browser.newPage();

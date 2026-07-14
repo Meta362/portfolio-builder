@@ -36,7 +36,8 @@
     "node-cron": "^4.6.0",
     "node-telegram-bot-api": "^1.1.2",
     "nodemailer": "^6.10.1",
-    "puppeteer": "^25.3.0",
+    "puppeteer-core": "^22.0.0",
+    "@sparticuz/chromium": "^121.0.0",
     "reflect-metadata": "^0.2.2",
     "tee": "^0.2.0",
     "winston": "^3.8.0"
